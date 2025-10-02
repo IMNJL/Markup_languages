@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="transform.xsl"?>
+<!DOCTYPE catalog SYSTEM "catalog.dtd">
+<catalog xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="catalog.xsd">
+  <product id="p1">
+    <name>Ноутбук ASUS VivoBook</name>
+    <price>50000</price>
+    <category>Электроника</category>
+    <in_stock>true</in_stock>
+  </product>
+  <product id="p2">
+    <name>Программирование на Python</name>
+    <price>1200</price>
+    <category>Книги</category>
+    <in_stock>true</in_stock>
+  </product>
+  <product id="p3">
+    <name>Смартфон Samsung</name>
+    <price>35000</price>
+    <category>Электроника</category>
+    <in_stock>false</in_stock>
+  </product>
+</catalog>

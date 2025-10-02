@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DOM Parser - Каталог товаров</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .product { border: 1px solid #ddd; padding: 15px; margin: 10px 0; border-radius: 5px; }
+        .in-stock { color: green; font-weight: bold; }
+        .out-of-stock { color: red; font-weight: bold; }
+        .stats { background: #f5f5f5; padding: 10px; margin: 20px 0; }
+        button { padding: 10px 15px; margin: 5px; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <h1>🛒 Каталог товаров (DOM обработка)</h1>
+
+    <div class="stats">
+        <button onclick="loadXML()">Загрузить XML</button>
+        <button onclick="showStats()">Показать статистику</button>
+        <button onclick="filterByCategory('Электроника')">Только электроника</button>
+        <button onclick="showAll()">Показать все</button>
+    </div>
+
+    <div id="output"></div>
+    <div id="stats"></div>
+
+    <script>
+        let xmlDoc = null;
+        let currentProducts = [];
+
+        function loadXML() {
+            const xhr = new XMLHttpRequest();
+            xhr.open("GET", "catalog.xml", true);
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === 4) {
+                    if (xhr.status === 200) {
+                        xmlDoc = xhr.responseXML;
+                        displayProducts(xmlDoc.getElementsByTagName("product"));
+                        document.getElementById("stats").innerHTML =
+                            "<p class='success'>✅ XML успешно загружен и обработан</p>";
+                    } else {
+                        document.getElementById("output").innerHTML =
+                            "<p class='error'>❌ Ошибка загрузки XML файла</p>";
+                    }
+                }
+            };
+            xhr.send();
+        }
+
+        function displayProducts(products) {
+            currentProducts = Array.from(products);
+            let html = "";
+
+            currentProducts.forEach(product => {
+                const id = product.getAttribute("id");
+                const name = product.getElementsByTagName("name")[0].textContent;
+                const price = product.getElementsByTagName("price")[0].textContent;
+                const category = product.getElementsByTagName("category")[0].textContent;
+                const inStock = product.getElementsByTagName("in_stock")[0].textContent;
+
+                html += `
+                <div class="product">
+                    <h3>${name}</h3>
+                    <p><strong>ID:</strong> ${id}</p>
+                    <p><strong>Цена:</strong> ${parseInt(price).toLocaleString()} руб.</p>
+                    <p><strong>Категория:</strong> ${category}</p>
+                    <p><strong>Наличие:</strong>
+                        <span class="${inStock === 'true' ? 'in-stock' : 'out-of-stock'}">
+                            ${inStock === 'true' ? '✓ В наличии' : '✗ Нет в наличии'}
+                        </span>
+                    </p>
+                </div>`;
+            });
+
+            document.getElementById("output").innerHTML = html;
+        }
+
+        function showStats() {
+            if (!xmlDoc) {
+                alert("Сначала загрузите XML!");
+                return;
+            }
+
+            const products = xmlDoc.getElementsByTagName("product");
+            const totalProducts = products.length;
+            const electronics = Array.from(products).filter(p =>
+                p.getElementsByTagName("category")[0].textContent === 'Электроника').length;
+            const books = Array.from(products).filter(p =>
+                p.getElementsByTagName("category")[0].textContent === 'Книги').length;
+            const inStock = Array.from(products).filter(p =>
+                p.getElementsByTagName("in_stock")[0].textContent === 'true').length;
+
+            document.getElementById("stats").innerHTML = `
+                <div class="stats">
+                    <h3>📊 Статистика каталога:</h3>
+                    <p>Всего товаров: ${totalProducts}</p>
+                    <p>Электроника: ${electronics}</p>
+                    <p>Книги: ${books}</p>
+                    <p>В наличии: ${inStock}</p>
+                    <p>Нет в наличии: ${totalProducts - inStock}</p>
+                </div>`;
+        }
+
+        function filterByCategory(category) {
+            if (!xmlDoc) {
+                alert("Сначала загрузите XML!");
+                return;
+            }
+
+            const allProducts = xmlDoc.getElementsByTagName("product");
+            const filtered = Array.from(allProducts).filter(product =>
+                product.getElementsByTagName("category")[0].textContent === category);
+
+            displayProducts(filtered);
+        }
+
+        function showAll() {
+            if (xmlDoc) {
+                displayProducts(xmlDoc.getElementsByTagName("product"));
+            }
+        }
+
+        // Автозагрузка при открытии страницы
+        window.onload = loadXML;
+    </script>
+</body>
+</html>

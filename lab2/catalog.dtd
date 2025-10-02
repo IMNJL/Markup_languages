@@ -1,0 +1,7 @@
+<!ELEMENT catalog (product*)>
+<!ELEMENT product (name, price, category, in_stock)>
+<!ATTLIST product id ID #REQUIRED>
+<!ELEMENT name (#PCDATA)>
+<!ELEMENT price (#PCDATA)>
+<!ELEMENT category (#PCDATA)>
+<!ELEMENT in_stock (#PCDATA)>
