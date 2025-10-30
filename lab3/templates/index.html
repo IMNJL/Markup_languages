@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <title>Курсы валют — Лабораторная 3</title>
+    <link rel="stylesheet" href="/static/css/style.css"/>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.socket.io/4.6.1/socket.io.min.js"></script>
+</head>
+<body>
+<div class="container">
+    <h1>Курсы валют (ЦБ РФ)</h1>
+    <div id="meta"></div>
+    <table id="rates-table">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>NumCode</th>
+            <th>CharCode</th>
+            <th>Nominal</th>
+            <th>Name</th>
+            <th>Value</th>
+            <th>Previous</th>
+        </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+
+    <hr/>
+
+    <div class="controls">
+        <label for="currency-select">Выберите валюту:</label>
+        <select id="currency-select"></select>
+        <button id="load-history">Загрузить график</button>
+    </div>
+
+    <canvas id="chart" width="800" height="400"></canvas>
+</div>
+
+<script src="/static/js/app.js"></script>
+</body>
+</html>
